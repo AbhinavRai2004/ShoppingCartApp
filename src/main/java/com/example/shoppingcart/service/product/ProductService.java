@@ -6,6 +6,7 @@ import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.repository.CategoryRepository;
 import com.example.shoppingcart.repository.ProductRepository;
 import com.example.shoppingcart.request.AddProductRequest;
+import com.example.shoppingcart.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +63,24 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public void updateProduct(Product product, long ProductId) {
+    public Product updateProduct(ProductUpdateRequest request, long productId) {
+         return productRepository.findById(productId)
+                 .map(existingProduct -> updateExistingProduct(existingProduct, request))
+                 .map(productRepository::save)
+                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+    }
 
+    private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request){
+        existingProduct.setName(request.getName());
+        existingProduct.setBrand(request.getBrand());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setInventory(request.getInventory());
+        existingProduct.setDescription(request.getDescription());
+
+        Category category = categoryRepository.findByName(request.getCategory().getName());
+        existingProduct.setCategory(category);
+
+        return existingProduct;
     }
 
     @Override

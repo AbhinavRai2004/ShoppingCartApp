@@ -2,6 +2,7 @@ package com.example.shoppingcart.service.product;
 
 import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.request.AddProductRequest;
+import com.example.shoppingcart.request.ProductUpdateRequest;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface IProductService {
     Product addProduct(AddProductRequest product);
     Product getProductById(long id);
     void deleteProductById(long id);
-    void updateProduct(Product product,long ProductId);
+    Product updateProduct(ProductUpdateRequest product, long ProductId);
     List<Product> getAllProducts();
     List<Product> getProductsByCategory(String category);
     List<Product> getProductsByBrand(String brand);
