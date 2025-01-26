@@ -1,7 +1,10 @@
 package com.example.shoppingcart.service.product;
 
+import com.example.shoppingcart.dto.ImageDto;
+import com.example.shoppingcart.dto.ProductDto;
 import com.example.shoppingcart.exceptions.ProductNotFoundException;
 import com.example.shoppingcart.model.Category;
+import com.example.shoppingcart.model.Image;
 import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.repository.CategoryRepository;
 import com.example.shoppingcart.repository.ProductRepository;
@@ -37,6 +40,7 @@ public class ProductService implements IProductService{
         return productRepository.save(createProduct(request, category));
     }
 
+
     private Product createProduct(AddProductRequest request, Category category){
         return new Product(
                 request.getName(),
@@ -49,21 +53,21 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product getProductById(long id) {
+    public Product getProductById(Long id) {
         return productRepository
                 .findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 
     @Override
-    public void deleteProductById(long id) {
+    public void deleteProductById(Long id) {
          productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
                 () -> {throw new ProductNotFoundException("Product not found");});
     }
 
     @Override
-    public Product updateProduct(ProductUpdateRequest request, long productId) {
+    public Product updateProduct(ProductUpdateRequest request, Long productId) {
          return productRepository.findById(productId)
                  .map(existingProduct -> updateExistingProduct(existingProduct, request))
                  .map(productRepository::save)
@@ -99,6 +103,11 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+        return List.of();
+    }
+
+    @Override
     public List<Product> getProductsByCategoryNameAndBrand(String category, String brand) {
         return productRepository.findByCategoryNameAndBrand(category, brand);
     }
@@ -116,5 +125,21 @@ public class ProductService implements IProductService{
     @Override
     public long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand,name);
+    }
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+//        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+//        List<Image> images = imageRepository.findByProductId(product.getId());
+//        List<ImageDto> imageDtos = images.stream()
+//                .map(image -> modelMapper.map(image, ImageDto.class))
+//                .toList();
+//        productDto.setImages(imageDtos);
+//        return productDto;
     }
 }
