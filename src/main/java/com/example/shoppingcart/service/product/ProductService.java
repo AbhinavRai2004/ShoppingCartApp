@@ -103,11 +103,6 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return List.of();
-    }
-
-    @Override
     public List<Product> getProductsByCategoryNameAndBrand(String category, String brand) {
         return productRepository.findByCategoryNameAndBrand(category, brand);
     }
@@ -123,7 +118,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public long countProductsByBrandAndName(String brand, String name) {
+    public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand,name);
     }
 
@@ -141,5 +136,6 @@ public class ProductService implements IProductService{
 //                .toList();
 //        productDto.setImages(imageDtos);
 //        return productDto;
+        return null;
     }
 }
