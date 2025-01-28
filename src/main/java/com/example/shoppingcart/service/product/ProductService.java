@@ -7,10 +7,12 @@ import com.example.shoppingcart.model.Category;
 import com.example.shoppingcart.model.Image;
 import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.repository.CategoryRepository;
+import com.example.shoppingcart.repository.ImageRepository;
 import com.example.shoppingcart.repository.ProductRepository;
 import com.example.shoppingcart.request.AddProductRequest;
 import com.example.shoppingcart.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.Optional;
 public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -129,13 +133,12 @@ public class ProductService implements IProductService{
 
     @Override
     public ProductDto convertToDto(Product product) {
-//        ProductDto productDto = modelMapper.map(product, ProductDto.class);
-//        List<Image> images = imageRepository.findByProductId(product.getId());
-//        List<ImageDto> imageDtos = images.stream()
-//                .map(image -> modelMapper.map(image, ImageDto.class))
-//                .toList();
-//        productDto.setImages(imageDtos);
-//        return productDto;
-        return null;
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 }
