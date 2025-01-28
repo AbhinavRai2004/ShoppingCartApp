@@ -55,8 +55,8 @@ public class ProductController {
     @PutMapping("/product/{productId}/update")
     public  ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
         try {
-            Product theProduct = productService.updateProduct(request, productId);
-            ProductDto productDto = productService.convertToDto(theProduct);
+            Product product = productService.updateProduct(request, productId);
+            ProductDto productDto = productService.convertToDto(product);
             return ResponseEntity.ok(new ApiResponse("Update product success!", productDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
